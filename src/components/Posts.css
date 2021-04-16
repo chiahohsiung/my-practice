@@ -1,0 +1,9 @@
+.post-container {
+	text-align: center;
+}
+
+.post {
+	border-style: solid;
+	border-radius: 1rem;
+	margin: 0.5rem;
+}

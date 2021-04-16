@@ -1,0 +1,16 @@
+.song-list-container {
+	width: 20rem;
+	height: 25rem;
+	margin: 0 auto;
+
+	/*border: solid;*/
+	border-radius: 5px;
+	box-shadow: 10px 10px grey;
+
+	background-color: white;
+	padding: 1rem;
+
+	text-align: center;
+
+	overflow: auto;
+}

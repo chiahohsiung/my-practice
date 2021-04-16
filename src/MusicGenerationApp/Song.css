@@ -1,0 +1,33 @@
+::root {
+  --song-height: 5rem;
+}
+
+.song {
+  
+  height: 3rem;
+  padding: 1rem;
+  margin: 1rem;
+  border-style: solid;
+  border-radius: 3rem;
+
+  display: flex;
+  /*justify-content: center;*/
+  align-items: center;
+}
+
+.song__btn {
+  border-style: none;
+  /*height: 1rem;*/
+  cursor: pointer;
+  outline: none;
+  transition: all .1s ease-in-out;
+}
+
+.song__btn:hover {
+  transform: scale(1.1); 
+}
+
+.song-name {
+  font-size: 1.5rem;
+  padding-left: 1rem;
+}
