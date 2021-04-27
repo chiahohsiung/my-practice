@@ -1,0 +1,18 @@
+.header {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	padding: 1rem 2rem;
+}
+
+.header__link {
+	color: white;
+	font-size: 1.5rem;
+	font-weight: bold;
+	text-decoration: none;
+	padding: .5rem;
+}
+
+.header__link:hover {
+	opacity: 0.5;
+}

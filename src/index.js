@@ -4,6 +4,7 @@ import './index.css';
 // import App from './App';
 // import CounterApp from './CounterApp';
 import MusicGenerationApp from './MusicGenerationApp/MusicGenerationApp';
+// import PortfolioApp from './Portfolio/PortfolioApp.js';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -17,6 +18,13 @@ ReactDOM.render(
   <MusicGenerationApp />,
   document.getElementById('root')
 );
+
+// ReactDOM.render(
+//   <BrowserRouter>
+//     <PortfolioApp />
+//   </BrowserRouter>,
+//   document.getElementById('root')
+// );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

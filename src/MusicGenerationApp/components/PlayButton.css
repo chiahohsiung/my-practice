@@ -1,0 +1,17 @@
+.play-btn {
+  height: 2rem;
+  width: 5rem;
+  margin: 2px;
+  border-radius: 0.5rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: yellow;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.play-btn:hover {
+  opacity: 0.8;
+}
