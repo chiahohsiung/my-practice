@@ -1,0 +1,11 @@
+.approach-btn {
+  height: 2rem;
+  width: 5rem;
+  margin: 2px;
+  border-radius: 0.4rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: yellow;
+}
+

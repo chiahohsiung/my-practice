@@ -9,7 +9,7 @@ function MidiButton(props) {
     <button className={`midi-btn ${pressedClass} beat-${props.beat}`}
       onClick={() => {
         setPressed(!isPressed)
-        props.handleClick(props.beat)
+        props.handleClick(props.note, props.beat)
       }}>
 
     </button>

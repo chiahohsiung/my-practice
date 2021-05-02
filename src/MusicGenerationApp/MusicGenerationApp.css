@@ -4,6 +4,11 @@
 	text-align: center;
 }
 
+.approach-container {
+  display: flex;
+  justify-content: center;
+}
+
 .MidiRoll {
   width: 80%;
   margin: 2rem auto;
