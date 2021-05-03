@@ -11,7 +11,7 @@ function MidiRow(props) {
         key={i} 
         note={note}
         beat={i+1} 
-        handleClick={(note, beat)=>props.handleClick(note, beat)}     
+        // handleClick={(note, beat)=>props.handleClick(note, beat)}     
       />
     )
   }

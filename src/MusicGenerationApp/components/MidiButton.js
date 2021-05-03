@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import { connect } from 'react-redux'
+import { clickNote } from '../actions/midiActions'
 import './MidiButton.css'
 
 function MidiButton(props) {
@@ -9,11 +10,11 @@ function MidiButton(props) {
     <button className={`midi-btn ${pressedClass} beat-${props.beat}`}
       onClick={() => {
         setPressed(!isPressed)
-        props.handleClick(props.note, props.beat)
+        props.clickNote(props.note, props.beat)
       }}>
 
     </button>
   )
 }
 
-export default MidiButton;
+export default connect(null, { clickNote })(MidiButton);

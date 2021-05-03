@@ -7,6 +7,8 @@ import MusicGenerationApp from './MusicGenerationApp/MusicGenerationApp';
 // import PortfolioApp from './Portfolio/PortfolioApp.js';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux'
+import store from './MusicGenerationApp/store'
 
 // ReactDOM.render(
 //   <BrowserRouter>
@@ -15,7 +17,9 @@ import { BrowserRouter } from 'react-router-dom';
 //   document.getElementById('root')
 // );
 ReactDOM.render(
-  <MusicGenerationApp />,
+  <Provider store={store}>
+    <MusicGenerationApp />
+  </Provider>,
   document.getElementById('root')
 );
 
