@@ -9,10 +9,17 @@
   background: yellow;
 }
 
-.midi-btn:hover {
-  opacity: 0.8;
-}
+
 
 .midi-btn-pressed {
   background: rgb(155, 10, 155);
+}
+
+.midi-btn-disabled {
+  background: #B5A641;
+  cursor: not-allowed;
+}
+
+.midi-btn-undisabled:hover {
+  opacity: 0.8;
 }

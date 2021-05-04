@@ -17,9 +17,11 @@ import store from './MusicGenerationApp/store'
 //   document.getElementById('root')
 // );
 ReactDOM.render(
-  <Provider store={store}>
-    <MusicGenerationApp />
-  </Provider>,
+  <BrowserRouter>
+    <Provider store={store}>
+      <MusicGenerationApp />
+    </Provider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

@@ -6,8 +6,11 @@ import './MidiButton.css'
 function MidiButton(props) {
   const [isPressed, setPressed] = useState(false);
   const pressedClass = isPressed ? "midi-btn-pressed" : "midi-btn-unpressed"
+  const disabledClass = props.disabled ? "midi-btn-disabled" : "midi-btn-undisabled"
   return (
-    <button className={`midi-btn ${pressedClass} beat-${props.beat}`}
+    <button 
+      className={`midi-btn ${disabledClass} ${pressedClass} beat-${props.beat}`}
+      disabled={props.disabled}
       onClick={() => {
         setPressed(!isPressed)
         props.clickNote(props.note, props.beat)

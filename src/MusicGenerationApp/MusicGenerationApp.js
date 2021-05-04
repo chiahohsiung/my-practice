@@ -57,11 +57,13 @@ class MusicGenerationApp extends React.Component {
     let midiRows = [];
     let i = 0
     for (let note in this.props.notesClicked) {
+      let disabled = i % 2 === 1 ? true : false;
       midiRows.push(
       <MidiRow 
         key={i}
         note={note}
         bars={this.props.bars}
+        disabled={disabled}
         // handleClick={this.handleClick}
       />)
       i++;
