@@ -7,6 +7,23 @@ import './MusicGenerationApp.css'
 import * as Tone from 'tone'
 import { connect } from "react-redux";
 import { setMidis } from './actions/midiActions'
+import getChordNotes from './musicLogic'
+
+const majorSeventh = [0, 4, 7, 11]
+const seventh = [0, 4, 7, 10]
+console.log('getNotes', getChordNotes([5, 1])); // "A4"
+const chordsWithMidiNumber = getChordNotes([5, 1])
+console.log('chordsWithMidiNumber ', chordsWithMidiNumber )
+const chordsWithNoteName = chordsWithMidiNumber.map(chord => {
+  const chordWithNoteName = chord.map(midiNumber => {
+    return Tone.Frequency(midiNumber, "midi").toNote(); // "A4"
+  })
+
+  return chordWithNoteName
+})
+
+console.log('chordsWithNoteName ', chordsWithNoteName )
+
 
 class MusicGenerationApp extends React.Component {
   constructor(props) {
@@ -28,19 +45,22 @@ class MusicGenerationApp extends React.Component {
     // })
     // console.log('newMidi', newMidi)
     // this.setState({ midi: newMidi})
-  }  
+  }
 
   // handleClick(note, beat) {
   //   const newMidi = {...this.state.midi}
   //   newMidi[note][beat-1] = !newMidi[note][beat-1] 
   //   this.setState({ midi: newMidi })
   // }
+  // playChords(chords, index) {
+  //   // chords: 2D array
 
+  // }
   handlePlay() {
-    const newMidi = {...this.props.notesClicked}
+    const newMidi = { ...this.props.notesClicked }
     const synth = new Tone.PolySynth().toDestination();
-    const now = Tone.now();    
-    for (let i=0; i<newMidi['C4'].length; ++i) {
+    const now = Tone.now();
+    for (let i = 0; i < newMidi['C4'].length; ++i) {
       let curNotes = []
       for (let note in newMidi) {
         if (newMidi[note][i]) {
@@ -48,8 +68,21 @@ class MusicGenerationApp extends React.Component {
         }
       }
       console.log('curNotes', curNotes)
-        
-      synth.triggerAttackRelease(curNotes, "8n", now+i*0.25);
+
+      synth.triggerAttackRelease(curNotes, "8n", now + i * 0.25);
+      if (i % 8 === 0) {
+        const synth = new Tone.PolySynth().toDestination();
+        const now = Tone.now();
+        const chordIndex = Math.floor(i / 8)
+        console.log('i', i)
+        console.log('chordsWithNoteName[chordIndex]', chordsWithNoteName[chordIndex])
+        synth.triggerAttackRelease(chordsWithNoteName[chordIndex], "2n", now + i * 0.25, 0.5);
+      }
+      // else if (i===8) {
+      //   const synth = new Tone.PolySynth().toDestination();
+      //   const now = Tone.now();
+      //   synth.triggerAttackRelease(['G4', 'B4', 'D5'], "2n", now + i * 0.25, 0.5);
+      // }
     }
   }
 
@@ -57,15 +90,16 @@ class MusicGenerationApp extends React.Component {
     let midiRows = [];
     let i = 0
     for (let note in this.props.notesClicked) {
-      let disabled = i % 2 === 1 ? true : false;
+      // let disabled = i % 2 === 1 ? true : false;
+      let disabled = false
       midiRows.push(
-      <MidiRow 
-        key={i}
-        note={note}
-        bars={this.props.bars}
-        disabled={disabled}
+        <MidiRow
+          key={i}
+          note={note}
+          bars={this.props.bars}
+          disabled={disabled}
         // handleClick={this.handleClick}
-      />)
+        />)
       i++;
     }
     console.log('midiRows', midiRows)
@@ -77,7 +111,7 @@ class MusicGenerationApp extends React.Component {
         <div className="approach-container">
           <ApproachButton>Chord Notes</ApproachButton>
         </div>
-        <PlayButton handlePlay={this.handlePlay}/>
+        <PlayButton handlePlay={this.handlePlay} />
         <div className="MidiRoll">
           {midiRows}
         </div>
