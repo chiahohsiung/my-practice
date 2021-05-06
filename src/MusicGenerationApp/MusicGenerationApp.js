@@ -7,13 +7,12 @@ import './MusicGenerationApp.css'
 import * as Tone from 'tone'
 import { connect } from "react-redux";
 import { setMidis } from './actions/midiActions'
-import getChordNotes from './musicLogic'
-
+import { getChordNotes, chordNotesOctaveToFour } from './musicLogic'
+import NoteColumn from './components/NoteButton'
 const majorSeventh = [0, 4, 7, 11]
 const seventh = [0, 4, 7, 10]
-console.log('getNotes', getChordNotes([5, 1])); // "A4"
-const chordsWithMidiNumber = getChordNotes([5, 1])
-console.log('chordsWithMidiNumber ', chordsWithMidiNumber )
+const chordsWithMidiNumber = getChordNotes([6, 2, 5, 1])
+console.log('chordsWithMidiNumber ', chordsWithMidiNumber)
 const chordsWithNoteName = chordsWithMidiNumber.map(chord => {
   const chordWithNoteName = chord.map(midiNumber => {
     return Tone.Frequency(midiNumber, "midi").toNote(); // "A4"
@@ -22,7 +21,7 @@ const chordsWithNoteName = chordsWithMidiNumber.map(chord => {
   return chordWithNoteName
 })
 
-console.log('chordsWithNoteName ', chordsWithNoteName )
+console.log('chordsWithNoteName ', chordsWithNoteName)
 
 
 class MusicGenerationApp extends React.Component {
@@ -67,15 +66,12 @@ class MusicGenerationApp extends React.Component {
           curNotes.push(note)
         }
       }
-      console.log('curNotes', curNotes)
 
       synth.triggerAttackRelease(curNotes, "8n", now + i * 0.25);
       if (i % 8 === 0) {
         const synth = new Tone.PolySynth().toDestination();
         const now = Tone.now();
         const chordIndex = Math.floor(i / 8)
-        console.log('i', i)
-        console.log('chordsWithNoteName[chordIndex]', chordsWithNoteName[chordIndex])
         synth.triggerAttackRelease(chordsWithNoteName[chordIndex], "2n", now + i * 0.25, 0.5);
       }
       // else if (i===8) {
@@ -89,15 +85,27 @@ class MusicGenerationApp extends React.Component {
   render() {
     let midiRows = [];
     let i = 0
+    const chordsWithNoteNameFour = chordNotesOctaveToFour(chordsWithNoteName)
+    console.log('chordsWithNoteNameFour', chordsWithNoteNameFour)
     for (let note in this.props.notesClicked) {
       // let disabled = i % 2 === 1 ? true : false;
-      let disabled = false
+      let isDisabledInBars = Array(this.props.bars).fill(false)
+      console.log('note', note)
+
+      chordsWithNoteNameFour.forEach((chord, index) => {
+        console.log('chord', chord)
+        if (!chord.includes(note)) {
+          isDisabledInBars[index] = true
+        }
+      })
+      console.log('isDisabledInBars', isDisabledInBars)
+      // let disabled = false
       midiRows.push(
         <MidiRow
           key={i}
           note={note}
           bars={this.props.bars}
-          disabled={disabled}
+          isDisabledInBars={isDisabledInBars}
         // handleClick={this.handleClick}
         />)
       i++;
@@ -111,10 +119,16 @@ class MusicGenerationApp extends React.Component {
         <div className="approach-container">
           <ApproachButton>Chord Notes</ApproachButton>
         </div>
+
+
         <PlayButton handlePlay={this.handlePlay} />
-        <div className="MidiRoll">
-          {midiRows}
+        <div className="note-midi-container">
+          <NoteColumn />
+          <div className="MidiRoll">
+            {midiRows}
+          </div>
         </div>
+
       </div>
     )
   }
