@@ -13,7 +13,7 @@ function NoteColumn(props) {
   )
 }
 
-function NoteButton(props) {
+export function NoteButton(props) {
   const { children } = props
   return (
     <button className='note-btn'>

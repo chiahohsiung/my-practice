@@ -1,0 +1,15 @@
+.chord-row {
+  display: flex;
+  justify-content: center;
+}
+.chord-btn {
+  height: 1.5rem;
+  width: 13.76rem;
+  margin: 2px;
+  border-radius: 0.4rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: #fdb99b;
+  font-weight: bold;
+}

@@ -9,10 +9,13 @@ import { connect } from "react-redux";
 import { setMidis } from './actions/midiActions'
 import { getChordNotes, chordNotesOctaveToFour } from './musicLogic'
 import NoteColumn from './components/NoteButton'
+import ChordRow from './components/ChordButton'
+
+
+
 const majorSeventh = [0, 4, 7, 11]
 const seventh = [0, 4, 7, 10]
 const chordsWithMidiNumber = getChordNotes([6, 2, 5, 1])
-console.log('chordsWithMidiNumber ', chordsWithMidiNumber)
 const chordsWithNoteName = chordsWithMidiNumber.map(chord => {
   const chordWithNoteName = chord.map(midiNumber => {
     return Tone.Frequency(midiNumber, "midi").toNote(); // "A4"
@@ -20,8 +23,6 @@ const chordsWithNoteName = chordsWithMidiNumber.map(chord => {
 
   return chordWithNoteName
 })
-
-console.log('chordsWithNoteName ', chordsWithNoteName)
 
 
 class MusicGenerationApp extends React.Component {
@@ -35,26 +36,9 @@ class MusicGenerationApp extends React.Component {
   }
 
   componentDidMount() {
-    console.log('props bars', this.props.bars)
-    console.log('props notes', this.props.notes)
     this.props.setMidis(this.props.notes, this.props.bars)
-    // const newMidi = {...this.state.midi}
-    // this.props.notes.reverse().forEach(note => {
-    //   newMidi[note] = Array(this.props.bars*8).fill(false)
-    // })
-    // console.log('newMidi', newMidi)
-    // this.setState({ midi: newMidi})
   }
 
-  // handleClick(note, beat) {
-  //   const newMidi = {...this.state.midi}
-  //   newMidi[note][beat-1] = !newMidi[note][beat-1] 
-  //   this.setState({ midi: newMidi })
-  // }
-  // playChords(chords, index) {
-  //   // chords: 2D array
-
-  // }
   handlePlay() {
     const newMidi = { ...this.props.notesClicked }
     const synth = new Tone.PolySynth().toDestination();
@@ -66,19 +50,15 @@ class MusicGenerationApp extends React.Component {
           curNotes.push(note)
         }
       }
-
       synth.triggerAttackRelease(curNotes, "8n", now + i * 0.25);
+      // play chord
       if (i % 8 === 0) {
         const synth = new Tone.PolySynth().toDestination();
         const now = Tone.now();
         const chordIndex = Math.floor(i / 8)
         synth.triggerAttackRelease(chordsWithNoteName[chordIndex], "2n", now + i * 0.25, 0.5);
       }
-      // else if (i===8) {
-      //   const synth = new Tone.PolySynth().toDestination();
-      //   const now = Tone.now();
-      //   synth.triggerAttackRelease(['G4', 'B4', 'D5'], "2n", now + i * 0.25, 0.5);
-      // }
+
     }
   }
 
@@ -86,19 +66,15 @@ class MusicGenerationApp extends React.Component {
     let midiRows = [];
     let i = 0
     const chordsWithNoteNameFour = chordNotesOctaveToFour(chordsWithNoteName)
-    console.log('chordsWithNoteNameFour', chordsWithNoteNameFour)
     for (let note in this.props.notesClicked) {
       // let disabled = i % 2 === 1 ? true : false;
       let isDisabledInBars = Array(this.props.bars).fill(false)
-      console.log('note', note)
-
       chordsWithNoteNameFour.forEach((chord, index) => {
-        console.log('chord', chord)
         if (!chord.includes(note)) {
           isDisabledInBars[index] = true
         }
       })
-      console.log('isDisabledInBars', isDisabledInBars)
+
       // let disabled = false
       midiRows.push(
         <MidiRow
@@ -110,7 +86,8 @@ class MusicGenerationApp extends React.Component {
         />)
       i++;
     }
-    console.log('midiRows', midiRows)
+    // make sure the lower notes are shown lower
+    midiRows = midiRows.reverse()
     return (
       <div className="app">
         <div className="header">
@@ -118,17 +95,21 @@ class MusicGenerationApp extends React.Component {
         </div>
         <div className="approach-container">
           <ApproachButton>Chord Notes</ApproachButton>
+          <ApproachButton>Motif Dev</ApproachButton>
         </div>
 
 
-        <PlayButton handlePlay={this.handlePlay} />
+        
+        <ChordRow />
         <div className="note-midi-container">
           <NoteColumn />
           <div className="MidiRoll">
             {midiRows}
           </div>
         </div>
-
+        <div className="play-btn-container">
+          <PlayButton handlePlay={this.handlePlay}/>
+        </div>
       </div>
     )
   }

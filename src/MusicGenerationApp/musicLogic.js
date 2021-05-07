@@ -29,7 +29,6 @@ export function chordNotesOctaveToFour(chords) {
     const newChord = []
     chord.forEach(note => {
       const newNote = note.slice(0, note.length-1) + '4'
-      console.log('newNote', newNote)
       newChord.push(newNote)
     })
     newChords.push(newChord)
