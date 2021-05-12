@@ -3,7 +3,8 @@
 const initialState = {
   bars: 4,
   notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'],
-  notesClicked: {}
+  notesClicked: {},
+  chordProgression: [2, 5, 1, 1]
 }
 function midiReducer(state=initialState, action) {
   switch (action.type) {

@@ -4,7 +4,7 @@ import './NoteButton.css'
 function NoteColumn(props) {
   
   const { notes } = props
-  const column = notes.reverse().map(note => <NoteButton>{note[0]}</NoteButton>)
+  const column = notes.reverse().map((note, index) => <NoteButton key={index}>{note[0]}</NoteButton>)
   
   return (
     <div className="note-column">

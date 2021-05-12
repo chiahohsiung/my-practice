@@ -10,20 +10,21 @@ import { setMidis } from './actions/midiActions'
 import { getChordNotes, chordNotesOctaveToFour } from './musicLogic'
 import NoteColumn from './components/NoteButton'
 import ChordRow from './components/ChordButton'
+import Description from './components/Description'
 
+const description = 'One of the easiest and most intuitive way to construct a melody is using notes in the chord. For example, during a C major chord, you can play C, E, or G. This way, the melody would sound smooth and harmonical.'
 
+function degreeToChords(chordProgression) {
+  const chordsWithMidiNumber = getChordNotes(chordProgression)
+  const chordsWithNoteName = chordsWithMidiNumber.map(chord => {
+    const chordWithNoteName = chord.map(midiNumber => {
+      return Tone.Frequency(midiNumber, "midi").toNote(); // "A4"
+    })
 
-const majorSeventh = [0, 4, 7, 11]
-const seventh = [0, 4, 7, 10]
-const chordsWithMidiNumber = getChordNotes([6, 2, 5, 1])
-const chordsWithNoteName = chordsWithMidiNumber.map(chord => {
-  const chordWithNoteName = chord.map(midiNumber => {
-    return Tone.Frequency(midiNumber, "midi").toNote(); // "A4"
+    return chordWithNoteName
   })
-
-  return chordWithNoteName
-})
-
+  return chordsWithNoteName
+}
 
 class MusicGenerationApp extends React.Component {
   constructor(props) {
@@ -40,6 +41,7 @@ class MusicGenerationApp extends React.Component {
   }
 
   handlePlay() {
+    const chordsWithNoteName = degreeToChords(this.props.chordProgression)
     const newMidi = { ...this.props.notesClicked }
     const synth = new Tone.PolySynth().toDestination();
     const now = Tone.now();
@@ -65,6 +67,7 @@ class MusicGenerationApp extends React.Component {
   render() {
     let midiRows = [];
     let i = 0
+    const chordsWithNoteName = degreeToChords(this.props.chordProgression)
     const chordsWithNoteNameFour = chordNotesOctaveToFour(chordsWithNoteName)
     for (let note in this.props.notesClicked) {
       // let disabled = i % 2 === 1 ? true : false;
@@ -99,7 +102,7 @@ class MusicGenerationApp extends React.Component {
         </div>
 
 
-        
+
         <ChordRow />
         <div className="note-midi-container">
           <NoteColumn />
@@ -107,9 +110,11 @@ class MusicGenerationApp extends React.Component {
             {midiRows}
           </div>
         </div>
-        <div className="play-btn-container">
-          <PlayButton handlePlay={this.handlePlay}/>
-        </div>
+        <Description description={description}>
+          <div className="play-btn-container">
+            <PlayButton handlePlay={this.handlePlay} />
+          </div>
+        </Description>
       </div>
     )
   }
@@ -121,6 +126,7 @@ const mapStateToProps = (state) => ({
   bars: state.midis.bars,
   notes: state.midis.notes,
   notesClicked: state.midis.notesClicked,
+  chordProgression: state.midis.chordProgression
 })
 
 // const mapDispatchToProps = (dispatch) => {

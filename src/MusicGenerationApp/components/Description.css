@@ -1,0 +1,10 @@
+.description-block {
+  margin: 2rem auto;
+  width: 50rem;
+  border: 3px solid;
+}
+
+.description-block p {
+  font-family: 'Varela Round', sans-serif;
+  padding: 1rem;
+}
