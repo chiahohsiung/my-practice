@@ -1,4 +1,4 @@
-.play-btn {
+.play-btn, .generate-example-btn {
   height: 2rem;
   width: 5rem;
   margin: 2px;
@@ -12,6 +12,6 @@
   transition: all .2s ease-in-out;
 }
 
-.play-btn:hover {
+.play-btn:hover, .generate-example-btn:hover {
   transform: scale(1.1);
 }

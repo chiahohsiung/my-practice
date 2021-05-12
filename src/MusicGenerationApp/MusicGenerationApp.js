@@ -11,6 +11,7 @@ import { getChordNotes, chordNotesOctaveToFour } from './musicLogic'
 import NoteColumn from './components/NoteButton'
 import ChordRow from './components/ChordButton'
 import Description from './components/Description'
+import GenerateExample from './components/GenerateExample'
 
 const description = 'One of the easiest and most intuitive way to construct a melody is using notes in the chord. For example, during a C major chord, you can play C, E, or G. This way, the melody would sound smooth and harmonical.'
 
@@ -26,6 +27,24 @@ function degreeToChords(chordProgression) {
   return chordsWithNoteName
 }
 
+function chordsToDisabledRows(chordsWithNoteName, notes, bars) {
+  const chordsWithNoteNameFour = chordNotesOctaveToFour(chordsWithNoteName)
+  let notesDisabled = {}
+  notes.forEach(note => {
+    // let disabled = i % 2 === 1 ? true : false;
+    let isDisabledInBars = Array(bars).fill(false)
+    chordsWithNoteNameFour.forEach((chord, index) => {
+      if (!chord.includes(note)) {
+        isDisabledInBars[index] = true
+      }
+    })
+    console.log('note', note)
+    notesDisabled[note] = isDisabledInBars
+
+  })
+  return notesDisabled
+}
+
 class MusicGenerationApp extends React.Component {
   constructor(props) {
     super(props)
@@ -36,9 +55,9 @@ class MusicGenerationApp extends React.Component {
     this.handlePlay = this.handlePlay.bind(this)
   }
 
-  componentDidMount() {
-    this.props.setMidis(this.props.notes, this.props.bars)
-  }
+  // componentDidMount() {
+  //   this.props.setMidis(this.props.notes, this.props.bars)
+  // }
 
   handlePlay() {
     const chordsWithNoteName = degreeToChords(this.props.chordProgression)
@@ -64,33 +83,47 @@ class MusicGenerationApp extends React.Component {
     }
   }
 
+  generateExample() {
+    // const chordsWithNoteName = degreeToChords(this.props.chordProgression)
+    // console.log('chordsWithNoteName', chordsWithNoteName)
+
+    // const notesDisabled = chordsToDisabledRows(chordsWithNoteName, this.props.notes, this.props.bars)
+    // console.log('notesDisabled', notesDisabled)
+    // for (let i=0; i<this.props.bars; ++i) {
+    //   this.props.notes.forEach(note => {
+    //     if (!notesDisabled[note]) {
+
+    //     }
+    //   })
+    // }
+
+  }
+
   render() {
     let midiRows = [];
     let i = 0
     const chordsWithNoteName = degreeToChords(this.props.chordProgression)
-    const chordsWithNoteNameFour = chordNotesOctaveToFour(chordsWithNoteName)
-    for (let note in this.props.notesClicked) {
-      // let disabled = i % 2 === 1 ? true : false;
-      let isDisabledInBars = Array(this.props.bars).fill(false)
-      chordsWithNoteNameFour.forEach((chord, index) => {
-        if (!chord.includes(note)) {
-          isDisabledInBars[index] = true
-        }
-      })
+    console.log('chordsWithNoteName', chordsWithNoteName)
 
-      // let disabled = false
+    const notesDisabled = chordsToDisabledRows(chordsWithNoteName, this.props.notes, this.props.bars)
+    console.log('notesDisabled', notesDisabled)
+    console.log('this.props.notesClicked', this.props.notesClicked)
+    this.props.notes.forEach(note => {
       midiRows.push(
         <MidiRow
           key={i}
           note={note}
           bars={this.props.bars}
-          isDisabledInBars={isDisabledInBars}
+          btnsClicked={this.props.notesClicked[note]}
+          isDisabledInBars={notesDisabled[note]}
         // handleClick={this.handleClick}
         />)
       i++;
-    }
+    })
+
     // make sure the lower notes are shown lower
     midiRows = midiRows.reverse()
+
     return (
       <div className="app">
         <div className="header">
@@ -112,6 +145,7 @@ class MusicGenerationApp extends React.Component {
         </div>
         <Description description={description}>
           <div className="play-btn-container">
+            <GenerateExample />
             <PlayButton handlePlay={this.handlePlay} />
           </div>
         </Description>

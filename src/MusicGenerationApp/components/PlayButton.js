@@ -5,7 +5,7 @@ import './PlayButton.css'
 function PlayButton(props) {
 
   return (
-    <button className={`play-btn`} onClick={()=>props.handlePlay()}>Play</button>
+    <button className="play-btn" onClick={()=>props.handlePlay()}>Play</button>
   )
 }
 

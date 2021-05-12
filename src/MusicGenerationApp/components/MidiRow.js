@@ -3,7 +3,7 @@ import MidiButton from './MidiButton'
 import './MidiRow.css'
 
 function MidiRow(props) {
-  const { bars, note, isDisabledInBars } = props;
+  const { bars, note, isDisabledInBars, btnsClicked } = props;
   const disabled = []
   isDisabledInBars.forEach((curBarDisabled, index) => {
     for (let i = 0; i<8; ++i) {
@@ -12,12 +12,14 @@ function MidiRow(props) {
   })
   const content = [];
   for (let i=0; i<bars*8; ++i) {
+    // console.log('btnsClicked[i]', btnsClicked[i])
     content.push(
       <MidiButton 
         key={i} 
         note={note}
         beat={i+1} 
         disabled={disabled[i]}
+        btnClicked={btnsClicked[i]}
         // handleClick={(note, beat)=>props.handleClick(note, beat)}     
       />
     )

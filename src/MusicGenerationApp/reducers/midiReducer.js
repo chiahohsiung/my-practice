@@ -6,6 +6,15 @@ const initialState = {
   notesClicked: {},
   chordProgression: [2, 5, 1, 1]
 }
+
+// initial btn unclicked
+const newMidi = {}
+initialState.notes.reverse().forEach(note => {
+  newMidi[note] = Array(initialState.bars*8).fill(false)
+})
+initialState.notesClicked = newMidi
+initialState.notesClicked['D4'][7] = true
+
 function midiReducer(state=initialState, action) {
   switch (action.type) {
     case 'setBar':
