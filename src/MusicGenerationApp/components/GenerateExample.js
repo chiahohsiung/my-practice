@@ -5,7 +5,7 @@ import './PlayButton.css'
 function GenerateExample(props) {
 
   return (
-    <button className="generate-example-btn" onClick={()=>alert('generate example')}>Example</button>
+    <button className="generate-example-btn" onClick={()=>props.generateExample()}>Example</button>
   )
 }
 

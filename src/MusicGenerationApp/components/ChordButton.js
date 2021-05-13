@@ -11,13 +11,11 @@ function ChordButton(props) {
 }
 
 function ChordRow(props) {
+  console.log('notes in chord row', props.notes)
   const buttons = props.chordProgression.map((degree, index) => {
-    console.log('degree', degree)
     let chordString = props.notes[degree-1]
     chordString = chordString.slice(0, chordString.length-1)
     chordString += ([1, 4, 5].includes(degree)) ? '' : 'm'
-    console.log('chordString', chordString)
-    console.log('props.notes', props.notes)
     return <ChordButton key={index}>{chordString}</ChordButton>
   })
   return (

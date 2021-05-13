@@ -6,7 +6,7 @@ import ApproachButton from './components/ApproachButton'
 import './MusicGenerationApp.css'
 import * as Tone from 'tone'
 import { connect } from "react-redux";
-import { setMidis } from './actions/midiActions'
+import { setMidis, setClicked } from './actions/midiActions'
 import { getChordNotes, chordNotesOctaveToFour } from './musicLogic'
 import NoteColumn from './components/NoteButton'
 import ChordRow from './components/ChordButton'
@@ -48,16 +48,9 @@ function chordsToDisabledRows(chordsWithNoteName, notes, bars) {
 class MusicGenerationApp extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      midi: {}
-    }
-    // this.handleClick = this.handleClick.bind(this)
     this.handlePlay = this.handlePlay.bind(this)
+    this.generateExample = this.generateExample.bind(this)
   }
-
-  // componentDidMount() {
-  //   this.props.setMidis(this.props.notes, this.props.bars)
-  // }
 
   handlePlay() {
     const chordsWithNoteName = degreeToChords(this.props.chordProgression)
@@ -84,31 +77,19 @@ class MusicGenerationApp extends React.Component {
   }
 
   generateExample() {
-    // const chordsWithNoteName = degreeToChords(this.props.chordProgression)
-    // console.log('chordsWithNoteName', chordsWithNoteName)
-
-    // const notesDisabled = chordsToDisabledRows(chordsWithNoteName, this.props.notes, this.props.bars)
-    // console.log('notesDisabled', notesDisabled)
-    // for (let i=0; i<this.props.bars; ++i) {
-    //   this.props.notes.forEach(note => {
-    //     if (!notesDisabled[note]) {
-
-    //     }
-    //   })
-    // }
-
+    const chords = [['G4', 'B4', 'D4'], ['C4', 'E4', 'G4']]
+    this.props.setClicked(chords, this.props.notesClicked)
   }
+
 
   render() {
     let midiRows = [];
     let i = 0
     const chordsWithNoteName = degreeToChords(this.props.chordProgression)
-    console.log('chordsWithNoteName', chordsWithNoteName)
-
     const notesDisabled = chordsToDisabledRows(chordsWithNoteName, this.props.notes, this.props.bars)
-    console.log('notesDisabled', notesDisabled)
-    console.log('this.props.notesClicked', this.props.notesClicked)
+    console.log(' this.props.notes', this.props.notes)
     this.props.notes.forEach(note => {
+      // console.log('note', note)
       midiRows.push(
         <MidiRow
           key={i}
@@ -116,13 +97,16 @@ class MusicGenerationApp extends React.Component {
           bars={this.props.bars}
           btnsClicked={this.props.notesClicked[note]}
           isDisabledInBars={notesDisabled[note]}
-        // handleClick={this.handleClick}
         />)
       i++;
     })
 
     // make sure the lower notes are shown lower
-    midiRows = midiRows.reverse()
+    if (this.props.notes[0] === 'C4') {
+      console.log('flip')
+      midiRows = midiRows.reverse()
+    }
+
 
     return (
       <div className="app">
@@ -133,9 +117,6 @@ class MusicGenerationApp extends React.Component {
           <ApproachButton>Chord Notes</ApproachButton>
           <ApproachButton>Motif Dev</ApproachButton>
         </div>
-
-
-
         <ChordRow />
         <div className="note-midi-container">
           <NoteColumn />
@@ -145,7 +126,7 @@ class MusicGenerationApp extends React.Component {
         </div>
         <Description description={description}>
           <div className="play-btn-container">
-            <GenerateExample />
+            <GenerateExample generateExample={this.generateExample} />
             <PlayButton handlePlay={this.handlePlay} />
           </div>
         </Description>
@@ -153,7 +134,6 @@ class MusicGenerationApp extends React.Component {
     )
   }
 }
-
 
 // export default MusicGenerationApp;
 const mapStateToProps = (state) => ({
@@ -163,11 +143,4 @@ const mapStateToProps = (state) => ({
   chordProgression: state.midis.chordProgression
 })
 
-// const mapDispatchToProps = (dispatch) => {
-//   console.log('mapdispatch')
-//   return {
-//     setmidis: (notes, bars) => setMidis(notes, bars)
-//   }
-// }
-
-export default connect(mapStateToProps, { setMidis })(MusicGenerationApp)
+export default connect(mapStateToProps, { setMidis, setClicked })(MusicGenerationApp)

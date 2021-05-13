@@ -6,7 +6,7 @@ export const setMidis = (notes, bars) => dispatch => {
   */
   console.log('actions setMidis')
   const newMidi = {}
-  notes.reverse().forEach(note => {
+  notes.forEach(note => {
     newMidi[note] = Array(bars*8).fill(false)
   })
   console.log('newMidi', newMidi)
@@ -24,6 +24,27 @@ export const clickNote = (note, beat) => dispatch => {
   dispatch({
     type: 'clickNote',
     payload: setting
+  })
+}
+
+export const setClicked = (chords, notesClicked) => dispatch => {
+  const newNotesClicked = {...notesClicked}
+  for (let note in newNotesClicked) {
+    newNotesClicked[note] = Array(newNotesClicked[note].length).fill(false)
+  }
+  chords.forEach((chord, index) => {
+    for (let i=0; i<8; ++i) {
+      // if < 0.5 rest else add a random note
+      if (Math.random() > 0.5) {
+        const randomIndex = Math.floor(Math.random() * chord.length);
+        const randomNote = chord[randomIndex]
+        newNotesClicked[randomNote][index*8 + i] = true
+      }
+    }
+  })
+  dispatch({
+    type: 'setClicked',
+    payload: newNotesClicked
   })
 }
 
