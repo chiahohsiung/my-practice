@@ -7,13 +7,13 @@ import './MusicGenerationApp.css'
 import * as Tone from 'tone'
 import { connect } from "react-redux";
 import { setMidis, setClicked } from './actions/midiActions'
-import { getChordNotes, chordNotesOctaveToFour } from './musicLogic'
+import { getChordNotes, chordNotesOctaveToFour, approachDescriptions } from './musicLogic'
 import NoteColumn from './components/NoteButton'
 import ChordRow from './components/ChordButton'
 import Description from './components/Description'
 import GenerateExample from './components/GenerateExample'
 
-const description = 'One of the easiest and most intuitive way to construct a melody is using notes in the chord. For example, during a C major chord, you can play C, E, or G. This way, the melody would sound smooth and harmonical.'
+// const description = 'One of the easiest and most intuitive way to construct a melody is using notes in the chord. For example, during a C major chord, you can play C, E, or G. This way, the melody would sound smooth and harmonical.'
 
 function degreeToChords(chordProgression) {
   const chordsWithMidiNumber = getChordNotes(chordProgression)
@@ -96,7 +96,7 @@ class MusicGenerationApp extends React.Component {
           note={note}
           bars={this.props.bars}
           btnsClicked={this.props.notesClicked[note]}
-          isDisabledInBars={notesDisabled[note]}
+          isDisabledInBars={Array(16).fill(false)}
         />)
       i++;
     })
@@ -107,7 +107,7 @@ class MusicGenerationApp extends React.Component {
       midiRows = midiRows.reverse()
     }
 
-
+    const description = approachDescriptions[this.props.approach]
     return (
       <div className="app">
         <div className="header">
@@ -137,6 +137,7 @@ class MusicGenerationApp extends React.Component {
 
 // export default MusicGenerationApp;
 const mapStateToProps = (state) => ({
+  approach: state.midis.approach,
   bars: state.midis.bars,
   notes: state.midis.notes,
   notesClicked: state.midis.notesClicked,

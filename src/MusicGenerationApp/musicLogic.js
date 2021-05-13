@@ -37,4 +37,9 @@ export function chordNotesOctaveToFour(chords) {
   return newChords
 }
 
+export const approachDescriptions = {
+  'chord notes': 'One of the easiest and most intuitive way to construct a melody is using notes in the chord. For example, during a C major chord, you can play C, E, or G. This way, the melody would sound smooth and harmonical.',
+  'tension': 'Using only notes in the chord could sound boring. To make the melody more interesting, we could add some tension by playing notes outside the chord.'
+}
+
 
