@@ -13,6 +13,13 @@
   background: rgb(155, 10, 155);
 }
 
+.midi-btn-outside {
+  background: #99D2F0;
+}
+
+.midi-btn-outside.midi-btn-pressed {
+  background: #0B5EBA;
+}
 .midi-btn-disabled {
   background: #B5A641;
   cursor: not-allowed;

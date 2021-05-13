@@ -8,9 +8,10 @@ function MidiButton(props) {
   const pressedClass = props.btnClicked ? "midi-btn-pressed" : "midi-btn-unpressed"
   
   const disabledClass = props.disabled ? "midi-btn-disabled" : "midi-btn-undisabled"
+  const insideClass = props.btnInside ? "" : "midi-btn-outside"
   return (
     <button 
-      className={`midi-btn ${disabledClass} ${pressedClass} beat-${props.beat}`}
+      className={`midi-btn ${insideClass} ${disabledClass} ${pressedClass} beat-${props.beat}`}
       disabled={props.disabled}
       onClick={() => {
         // setPressed(!isPressed)

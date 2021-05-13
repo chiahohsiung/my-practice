@@ -1,7 +1,7 @@
 
 
 const initialState = {
-  approach: 'tension',
+  approach: 'chord notes',
   bars: 2,
   notes: ["C4", "D4", "E4", "F4", "G4", "A4", "B4"],
   notesClicked: {},
@@ -39,7 +39,8 @@ function midiReducer(state=initialState, action) {
     
     case 'setClicked':
       return {...state, notesClicked: action.payload}
-
+    case 'setApproach':
+      return {...state, approach: action.payload}
     default:
       return state
   }

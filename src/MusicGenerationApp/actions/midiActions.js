@@ -1,3 +1,4 @@
+import { approachDescriptions } from "../musicLogic"
 
 export const setMidis = (notes, bars) => dispatch => {
   /*
@@ -48,3 +49,9 @@ export const setClicked = (chords, notesClicked) => dispatch => {
   })
 }
 
+export const setApproach = (approach) => dispatch => {
+  dispatch({
+    type: 'setApproach',
+    payload: approach
+  })
+}

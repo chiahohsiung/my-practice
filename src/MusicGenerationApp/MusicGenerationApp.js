@@ -45,6 +45,25 @@ function chordsToDisabledRows(chordsWithNoteName, notes, bars) {
   return notesDisabled
 }
 
+function chordsToInsideRows(chordsWithNoteName, notes, bars) {
+  const chordsWithNoteNameFour = chordNotesOctaveToFour(chordsWithNoteName)
+  let notesInside = {}
+  notes.forEach(note => {
+    // let disabled = i % 2 === 1 ? true : false;
+    let isDisabledInBars = Array(bars).fill(true)
+    chordsWithNoteNameFour.forEach((chord, index) => {
+      if (!chord.includes(note)) {
+        isDisabledInBars[index] = false
+      }
+
+    })
+    console.log('note', note)
+    notesInside[note] = isDisabledInBars
+
+  })
+  return notesInside
+}
+
 class MusicGenerationApp extends React.Component {
   constructor(props) {
     super(props)
@@ -77,8 +96,16 @@ class MusicGenerationApp extends React.Component {
   }
 
   generateExample() {
-    const chords = [['G4', 'B4', 'D4'], ['C4', 'E4', 'G4']]
-    this.props.setClicked(chords, this.props.notesClicked)
+    if (this.props.approach === 'chord notes') {
+      const chordsWithNoteName = degreeToChords(this.props.chordProgression)
+      const chordsWithNoteNameFour = chordNotesOctaveToFour(chordsWithNoteName)
+      this.props.setClicked(chordsWithNoteNameFour, this.props.notesClicked)
+
+    }
+    else {
+      const chords = Array(this.props.chordProgression.length).fill(this.props.notes)
+      this.props.setClicked(chords, this.props.notesClicked)
+    }
   }
 
 
@@ -87,7 +114,8 @@ class MusicGenerationApp extends React.Component {
     let i = 0
     const chordsWithNoteName = degreeToChords(this.props.chordProgression)
     const notesDisabled = chordsToDisabledRows(chordsWithNoteName, this.props.notes, this.props.bars)
-    console.log(' this.props.notes', this.props.notes)
+    const notesInside = chordsToInsideRows(chordsWithNoteName, this.props.notes, this.props.bars)
+    console.log('notesInside', notesInside)
     this.props.notes.forEach(note => {
       // console.log('note', note)
       midiRows.push(
@@ -96,7 +124,10 @@ class MusicGenerationApp extends React.Component {
           note={note}
           bars={this.props.bars}
           btnsClicked={this.props.notesClicked[note]}
-          isDisabledInBars={Array(16).fill(false)}
+          isDisabledInBars={this.props.approach === 'chord notes' ?
+            notesDisabled[note] : Array(16).fill(false)}
+          isInsideInBars={this.props.approach === 'more tension' ?
+            notesInside[note] : Array(16).fill(true)}
         />)
       i++;
     })
@@ -114,8 +145,8 @@ class MusicGenerationApp extends React.Component {
           <h1>How to Improvise</h1>
         </div>
         <div className="approach-container">
-          <ApproachButton>Chord Notes</ApproachButton>
-          <ApproachButton>Motif Dev</ApproachButton>
+          <ApproachButton approach={"chord notes"}>Chord Notes</ApproachButton>
+          <ApproachButton approach={"more tension"}>More Tension</ApproachButton>
         </div>
         <ChordRow />
         <div className="note-midi-container">
